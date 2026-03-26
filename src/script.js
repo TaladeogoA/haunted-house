@@ -159,6 +159,7 @@ house.add(door)
 // Bushes
 const bushGeometry = new THREE.SphereGeometry(1, 16, 16)
 const bushMaterial = new THREE.MeshStandardMaterial({
+    color: 0xc1e1b9,
     map: bushColorTexture,
     normalMap: bushNormalTexture,
     aoMap: bushARMTexture,
@@ -172,53 +173,31 @@ const bushMaterial = new THREE.MeshStandardMaterial({
 const bush1 = new THREE.Mesh(bushGeometry, bushMaterial)
 bush1.scale.set(0.45, 0.45, 0.45)
 bush1.position.set(2.1, 0.3, 2.2)
-bush1.rotation.x = -0.75
+bush1.rotation.x = -0.25
+bush1.rotation.z = -1.7
 
 const bush2 = new THREE.Mesh(bushGeometry, bushMaterial)
 bush2.scale.set(0.35, 0.35, 0.35)
-bush2.position.set(1.4, 0.1, 2.1)
+bush2.position.set(1.4, 0.25, 2.4)
+bush2.rotation.x = -0.6
 
 const bush3 = new THREE.Mesh(bushGeometry, bushMaterial)
 bush3.scale.set(0.4, 0.4, 0.4)
-bush3.position.set(-1.3, 0.3, 2.2)
+bush3.position.set(-1.4, 0.3, 2.5)
+bush3.rotation.x = -0.95
+bush3.rotation.y = -0.95
 
 const bush4 = new THREE.Mesh(bushGeometry, bushMaterial)
 bush4.scale.set(0.25, 0.25, 0.25)
 bush4.position.set(-1.7, 0.2, 2.6)
+bush4.rotation.z = -0.8
 
-house.add(bush1, bush2, bush3, bush4)
+const bush5 = new THREE.Mesh(bushGeometry, bushMaterial)
+bush5.scale.set(0.25, 0.25, 0.25)
+bush5.position.set(-1, 0.2, 2.5)
+bush5.rotation.z = -2.8
 
-const bush1Folder = gui.addFolder('Bush 1')
-bush1Folder.add(bush1.position, 'x').min(-4).max(4).step(0.001).name('posX')
-bush1Folder.add(bush1.position, 'y').min(-1).max(3).step(0.001).name('posY')
-bush1Folder.add(bush1.position, 'z').min(-4).max(4).step(0.001).name('posZ')
-bush1Folder.add(bush1.rotation, 'x').min(-Math.PI).max(Math.PI).step(0.001).name('rotX')
-bush1Folder.add(bush1.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name('rotY')
-bush1Folder.add(bush1.rotation, 'z').min(-Math.PI).max(Math.PI).step(0.001).name('rotZ')
-
-const bush2Folder = gui.addFolder('Bush 2')
-bush2Folder.add(bush2.position, 'x').min(-4).max(4).step(0.001).name('posX')
-bush2Folder.add(bush2.position, 'y').min(-1).max(3).step(0.001).name('posY')
-bush2Folder.add(bush2.position, 'z').min(-4).max(4).step(0.001).name('posZ')
-bush2Folder.add(bush2.rotation, 'x').min(-Math.PI).max(Math.PI).step(0.001).name('rotX')
-bush2Folder.add(bush2.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name('rotY')
-bush2Folder.add(bush2.rotation, 'z').min(-Math.PI).max(Math.PI).step(0.001).name('rotZ')
-
-const bush3Folder = gui.addFolder('Bush 3')
-bush3Folder.add(bush3.position, 'x').min(-4).max(4).step(0.001).name('posX')
-bush3Folder.add(bush3.position, 'y').min(-1).max(3).step(0.001).name('posY')
-bush3Folder.add(bush3.position, 'z').min(-4).max(4).step(0.001).name('posZ')
-bush3Folder.add(bush3.rotation, 'x').min(-Math.PI).max(Math.PI).step(0.001).name('rotX')
-bush3Folder.add(bush3.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name('rotY')
-bush3Folder.add(bush3.rotation, 'z').min(-Math.PI).max(Math.PI).step(0.001).name('rotZ')
-
-const bush4Folder = gui.addFolder('Bush 4')
-bush4Folder.add(bush4.position, 'x').min(-4).max(4).step(0.001).name('posX')
-bush4Folder.add(bush4.position, 'y').min(-1).max(3).step(0.001).name('posY')
-bush4Folder.add(bush4.position, 'z').min(-4).max(4).step(0.001).name('posZ')
-bush4Folder.add(bush4.rotation, 'x').min(-Math.PI).max(Math.PI).step(0.001).name('rotX')
-bush4Folder.add(bush4.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name('rotY')
-bush4Folder.add(bush4.rotation, 'z').min(-Math.PI).max(Math.PI).step(0.001).name('rotZ')
+house.add(bush1, bush2, bush3, bush4, bush5)
 
 // Graves
 const graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2)
@@ -242,7 +221,7 @@ for (let i = 0; i < 30; i++) {
 
         overlapping = false;
 
-        for (const bush of [bush1, bush2, bush3, bush4]) {
+        for (const bush of [bush1, bush2, bush3, bush4, bush5]) {
             const distance = Math.hypot(x - bush.position.x, z - bush.position.z)
             if (distance < bush.scale.x + 0.4) {
                 overlapping = true;
