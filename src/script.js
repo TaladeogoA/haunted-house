@@ -81,6 +81,34 @@ const bushDisplacementTexture = textureLoader.load('./bush/leaves_forest_ground_
 
 bushColorTexture.colorSpace = THREE.SRGBColorSpace
 
+// Graves
+const graveColorTexture = textureLoader.load('./graves/plastered_stone_wall_1k/plastered_stone_wall_diff_1k.jpg')
+const graveARMTexture = textureLoader.load('./graves/plastered_stone_wall_1k/plastered_stone_wall_arm_1k.jpg')
+const graveNormalTexture = textureLoader.load('./graves/plastered_stone_wall_1k/plastered_stone_wall_nor_gl_1k.jpg')
+graveColorTexture.colorSpace = THREE.SRGBColorSpace
+
+graveColorTexture.repeat.set(1.2, 1.6)
+graveARMTexture.repeat.set(1.2, 1.6)
+graveNormalTexture.repeat.set(1.2, 1.6)
+
+graveColorTexture.wrapS = THREE.RepeatWrapping
+graveColorTexture.wrapT = THREE.RepeatWrapping
+graveARMTexture.wrapS = THREE.RepeatWrapping
+graveARMTexture.wrapT = THREE.RepeatWrapping
+graveNormalTexture.wrapS = THREE.RepeatWrapping
+graveNormalTexture.wrapT = THREE.RepeatWrapping
+
+// Door
+const doorColorTexture = textureLoader.load('./door/color.jpg')
+const doorAlphaTexture = textureLoader.load('./door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureLoader.load('./door/ambientOcclusion.jpg')
+const doorHeightTexture = textureLoader.load('./door/height.jpg')
+const doorNormalTexture = textureLoader.load('./door/normal.jpg')
+const doorMetalnessTexture = textureLoader.load('./door/metalness.jpg')
+const doorRoughnessTexture = textureLoader.load('./door/roughness.jpg')
+
+doorColorTexture.colorSpace = THREE.SRGBColorSpace
+
 /**
  * House
  */
@@ -149,8 +177,19 @@ house.add(roof)
 
 // Door
 const door = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.2, 2.2),
-    new THREE.MeshStandardMaterial()
+    new THREE.PlaneGeometry(2.2, 2.2, 100, 100),
+    new THREE.MeshStandardMaterial({
+        map: doorColorTexture,
+        transparent: true,
+        alphaMap: doorAlphaTexture,
+        aoMap: doorAmbientOcclusionTexture,
+        displacementMap: doorHeightTexture,
+        displacementScale: 0.15,
+        displacementBias: -0.04,
+        normalMap: doorNormalTexture,
+        metalnessMap: doorMetalnessTexture,
+        roughnessMap: doorRoughnessTexture,
+    })
 )
 door.position.y = 1
 door.position.z = 2 + 0.01
@@ -159,7 +198,6 @@ house.add(door)
 // Bushes
 const bushGeometry = new THREE.SphereGeometry(1, 16, 16)
 const bushMaterial = new THREE.MeshStandardMaterial({
-    color: 0xc1e1b9,
     map: bushColorTexture,
     normalMap: bushNormalTexture,
     aoMap: bushARMTexture,
@@ -200,15 +238,33 @@ bush5.rotation.z = -2.8
 house.add(bush1, bush2, bush3, bush4, bush5)
 
 // Graves
-const graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2)
-const graveMaterial = new THREE.MeshStandardMaterial()
+const graveShape = new THREE.Shape()
+graveShape.moveTo(-0.3, -0.4)
+graveShape.lineTo(0.3, -0.4)
+graveShape.lineTo(0.3, 0.1)
+graveShape.absarc(0, 0.1, 0.3, 0, Math.PI, false)
+const graveGeometry = new THREE.ExtrudeGeometry(graveShape, {
+    depth: 0.2,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: 0.02,
+    bevelThickness: 0.02
+})
+graveGeometry.center()
+const graveMaterial = new THREE.MeshStandardMaterial({
+    map: graveColorTexture,
+    aoMap: graveARMTexture,
+    roughnessMap: graveARMTexture,
+    metalnessMap: graveARMTexture,
+    normalMap: graveNormalTexture,
+})
 
 const graves = new THREE.Group()
 scene.add(graves)
 
 const placedGraves = []
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 20; i++) {
     let x, z;
     let overlapping = true;
     let attempts = 0;
@@ -243,7 +299,7 @@ for (let i = 0; i < 30; i++) {
 
     const grave = new THREE.Mesh(graveGeometry, graveMaterial)
     grave.position.x = x
-    grave.position.y = Math.random() * 0.4
+    grave.position.y = 0.2 + Math.random() * 0.2
     grave.position.z = z
     grave.rotation.x = (Math.random() - 0.5) * 0.4
     grave.rotation.y = (Math.random() - 0.5) * 0.4
